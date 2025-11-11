@@ -5,7 +5,7 @@
     <!-- Hero: Immediate Hook -->
     <section class="hero">
         <div class="container">
-            <h1>Localdoc is free.<br />Unless you value your time.</h1>
+            <h1>Documentation without dependency.</h1>
             <p class="subhero">
                 All documentation. One CLI. No corporate bullshit.
             </p>
