@@ -6,7 +6,9 @@
     <section class="hero">
         <div class="container">
             <h1>Localdoc is free.<br />Unless you value your time.</h1>
-            <p class="subhero">All documentation. One CLI. No corporate bullshit.</p>
+            <p class="subhero">
+                All documentation. One CLI. No corporate bullshit.
+            </p>
         </div>
     </section>
 
@@ -16,17 +18,27 @@
             <h2>Get going. Fast.</h2>
             <div class="terminal">
                 <div class="terminal-line">$ cargo install localdoc</div>
-                <div class="terminal-line output">✓ installed localdoc v0.1.0</div>
+                <div class="terminal-line output">
+                    ✓ installed localdoc v0.1.0
+                </div>
                 <div class="terminal-line">&nbsp;</div>
                 <div class="terminal-line">$ localdoc install rust</div>
-                <div class="terminal-line output">✓ rust@1.70.0 (15,234 entries)</div>
+                <div class="terminal-line output">
+                    ✓ rust@1.70.0 (15,234 entries)
+                </div>
                 <div class="terminal-line">&nbsp;</div>
-                <div class="terminal-line">$ localdoc query "iterate vector"</div>
+                <div class="terminal-line">
+                    $ localdoc query "iterate vector"
+                </div>
                 <div class="terminal-line output">std::vec::Vec::iter()</div>
-                <div class="terminal-line output">std::vec::Vec::iter_mut()</div>
+                <div class="terminal-line output">
+                    std::vec::Vec::iter_mut()
+                </div>
                 <div class="terminal-line output">for x in &vec</div>
             </div>
-            <p class="quickstart-note">That's it. Docs in your terminal. Offline. Forever.</p>
+            <p class="quickstart-note">
+                That's it. Docs in your terminal. Offline. Forever.
+            </p>
         </div>
     </section>
 
@@ -37,23 +49,43 @@
             <div class="shame-list">
                 <div class="shame-item">
                     <p class="shame-target">ReadMe.io</p>
-                    <p class="shame-crime">$99/mo to host markdown. A glorified CMS that makes you refresh the page to see search results. Your docs deserve better than a SaaS jailcell.</p>
+                    <p class="shame-crime">
+                        $99/mo to host markdown. A glorified CMS that makes you
+                        refresh the page to see search results. Your docs
+                        deserve better than a SaaS jailcell.
+                    </p>
                 </div>
                 <div class="shame-item">
                     <p class="shame-target">Stripe Docs</p>
-                    <p class="shame-crime">Beautiful design. Useless search. Try finding which webhook event actually fires first. Go ahead. We'll wait.</p>
+                    <p class="shame-crime">
+                        Beautiful design. Useless search. Try finding which
+                        webhook event actually fires first. Go ahead. We'll
+                        wait.
+                    </p>
                 </div>
                 <div class="shame-item">
                     <p class="shame-target">Square API Sandbox</p>
-                    <p class="shame-crime">Built a payments empire. Can't make a testing environment that loads in under 10 seconds. Spinners don't pay rent.</p>
+                    <p class="shame-crime">
+                        Built a payments empire. Can't make a testing
+                        environment that loads in under 10 seconds. Spinners
+                        don't pay rent.
+                    </p>
                 </div>
                 <div class="shame-item">
                     <p class="shame-target">AWS Docs</p>
-                    <p class="shame-crime">17 tabs open. Still don't know if you need IAM:PassRole. The search gives you 900 results. None of them answer your question.</p>
+                    <p class="shame-crime">
+                        17 tabs open. Still don't know if you need IAM:PassRole.
+                        The search gives you 900 results. None of them answer
+                        your question.
+                    </p>
                 </div>
                 <div class="shame-item">
                     <p class="shame-target">Stack Overflow</p>
-                    <p class="shame-crime">"Marked as duplicate." The linked answer is from 2011 and doesn't work. Mods won't let you ask again. Ship your rage into a CLI instead.</p>
+                    <p class="shame-crime">
+                        "Marked as duplicate." The linked answer is from 2011
+                        and doesn't work. Mods won't let you ask again. Ship
+                        your rage into a CLI instead.
+                    </p>
                 </div>
             </div>
             <p class="shame-manifesto">
@@ -88,12 +120,40 @@
         <div class="container">
             <h2>Why Doctown exists.</h2>
             <div class="manifesto-content">
-                <p>Corporate documentation is a scam. A business model dressed as a public good.</p>
-                <p>You don't need a dashboard to search a string. You don't need a login to read a function signature. You don't need cookie banners, analytics trackers, and 2MB of JavaScript to find out how <code>async/await</code> works.</p>
-                <p>You don't need GitBook upselling you on "team seats." You don't need ReadMe charging $99/mo to render markdown. You don't need Confluence making you click through three dropdowns to copy a code snippet.</p>
-                <p>Docs should be <strong>local</strong>, <strong>fast</strong>, and <strong>offline</strong>. They should live in your terminal—not behind a paywall, not in a Notion workspace with broken search, not in some VC-funded "knowledge graph" that'll pivot to AI in six months and rug you by Q3.</p>
-                <p><strong>Localdoc is the alternative.</strong> A CLI you own. Docs you control. No middleman. No metrics. No investors demanding 10x growth on your search queries.</p>
-                <p>If you've ever rage-closed a docs site because it <em>just wouldn't fucking load</em>—this is for you.</p>
+                <p>
+                    Corporate documentation is a scam. A business model dressed
+                    as a public good.
+                </p>
+                <p>
+                    You don't need a dashboard to search a string. You don't
+                    need a login to read a function signature. You don't need
+                    cookie banners, analytics trackers, and 2MB of JavaScript to
+                    find out how <code>async/await</code> works.
+                </p>
+                <p>
+                    You don't need GitBook upselling you on "team seats." You
+                    don't need ReadMe charging $99/mo to render markdown. You
+                    don't need Confluence making you click through three
+                    dropdowns to copy a code snippet.
+                </p>
+                <p>
+                    Docs should be <strong>local</strong>,
+                    <strong>fast</strong>, and <strong>offline</strong>. They
+                    should live in your terminal—not behind a paywall, not in a
+                    Notion workspace with broken search, not in some VC-funded
+                    "knowledge graph" that'll pivot to AI in six months and rug
+                    you by Q3.
+                </p>
+                <p>
+                    <strong>Localdoc is the alternative.</strong> A CLI you own.
+                    Docs you control. No middleman. No metrics. No investors demanding
+                    10x growth on your search queries.
+                </p>
+                <p>
+                    If you've ever rage-closed a docs site because it <em
+                        >just wouldn't fucking load</em
+                    >—this is for you.
+                </p>
             </div>
         </div>
     </section>
@@ -126,7 +186,8 @@
             </div>
             <p class="model-philosophy">
                 <strong>OSS at the edges. Product at the core.</strong><br />
-                The free layer proves it works. The premium layer keeps the lights on.
+                The free layer proves it works. The premium layer keeps the lights
+                on.
             </p>
         </div>
     </section>
@@ -148,13 +209,24 @@
     <!-- Footer -->
     <section class="footer">
         <div class="container">
-            <p>Built by someone who has lost their mind, for people who are on the verge themselves.</p>
+            <p>
+                Built by someone who has lost their mind, for people who are on
+                the verge themselves.
+            </p>
             <p class="footer-links">
-                <a href="https://github.com/xandwr/doctown-monorepo" target="_blank" rel="noopener">GitHub</a>
+                <a
+                    href="https://github.com/xandwr/doctown-monorepo"
+                    target="_blank"
+                    rel="noopener">GitHub</a
+                >
                 <span>•</span>
                 <span class="coming-soon">Docs (soon)</span>
                 <span>•</span>
-                <span class="coming-soon">Discord (soon)</span>
+                <a
+                    href="https://discord.gg/r8rbntTaKQ"
+                    target="_blank"
+                    rel="noopener">Discord</a
+                >
             </p>
         </div>
     </section>
@@ -165,7 +237,8 @@
         margin: 0;
         background: #000;
         color: #fff;
-        font-family: 'IBM Plex Mono', 'SF Mono', 'Monaco', 'Cascadia Code', monospace;
+        font-family: "IBM Plex Mono", "SF Mono", "Monaco", "Cascadia Code",
+            monospace;
         overflow-x: hidden;
         -webkit-font-smoothing: antialiased;
     }
@@ -398,7 +471,7 @@
     }
 
     .model-column li::before {
-        content: '→';
+        content: "→";
         position: absolute;
         left: 0;
         color: #666;
