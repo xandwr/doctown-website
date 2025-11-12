@@ -20,3 +20,36 @@ export interface GitHubTokenResponse {
   token_type: string;
   scope: string;
 }
+
+export interface Repository {
+  id: number;
+  name: string;
+  full_name: string;
+  description: string | null;
+  html_url: string;
+  default_branch: string;
+  private: boolean;
+  language: string | null;
+  stargazers_count: number;
+  updated_at: string;
+  has_docpack: boolean;
+}
+
+export interface Docpack {
+  id: number;
+  name: string;
+  version: string;
+  ecosystem: string;
+  summary: string | null;
+  description: string | null;
+  homepage: string | null;
+  tags: string[];
+  github_repo_id: number | null;
+  github_repo_full_name: string | null;
+  github_repo_url: string | null;
+  default_branch: string | null;
+  downloads: number;
+  is_public: boolean;
+  created_at: string;
+  updated_at: string;
+}
