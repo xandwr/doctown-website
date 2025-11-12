@@ -53,10 +53,16 @@ export const GET: RequestHandler = async ({ url, cookies, fetch }) => {
     );
 
     if (!tokenResponse.ok) {
+      const errorText = await tokenResponse.text();
+      console.error("GitHub token exchange failed:", errorText);
       throw error(500, "Failed to exchange code for token");
     }
 
     const tokenData: GitHubTokenResponse = await tokenResponse.json();
+    console.log(
+      "Token exchange successful, access_token present:",
+      !!tokenData.access_token,
+    );
 
     // Fetch GitHub user profile
     const userResponse = await fetch("https://api.github.com/user", {
@@ -67,10 +73,13 @@ export const GET: RequestHandler = async ({ url, cookies, fetch }) => {
     });
 
     if (!userResponse.ok) {
+      const errorText = await userResponse.text();
+      console.error("GitHub user fetch failed:", errorText);
       throw error(500, "Failed to fetch GitHub user profile");
     }
 
     const githubUser: GitHubUser = await userResponse.json();
+    console.log("GitHub user fetched:", githubUser.login);
 
     // Create or update user in backend
     const backendUrl =
@@ -78,6 +87,7 @@ export const GET: RequestHandler = async ({ url, cookies, fetch }) => {
         ? "https://doctown-backend.fly.dev"
         : "http://localhost:3000";
 
+    console.log("Attempting to create user in backend:", backendUrl);
     const createUserResponse = await fetch(`${backendUrl}/api/v1/users`, {
       method: "POST",
       headers: {
@@ -92,11 +102,20 @@ export const GET: RequestHandler = async ({ url, cookies, fetch }) => {
     });
 
     if (!createUserResponse.ok) {
-      console.error("Failed to create/update user in backend");
-      // For now, continue anyway - we'll handle this better later
+      const errorText = await createUserResponse.text();
+      console.error(
+        "Backend user creation failed:",
+        createUserResponse.status,
+        errorText,
+      );
+      throw error(500, `Backend error: ${createUserResponse.status}`);
     }
 
     const userData = await createUserResponse.json();
+    console.log(
+      "User created/updated in backend, session_token present:",
+      !!userData.session_token,
+    );
     const sessionToken = userData.session_token || crypto.randomUUID();
 
     // Set session cookie
