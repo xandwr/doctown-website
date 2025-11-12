@@ -55,11 +55,11 @@
                 </p>
                 <p>
                     <strong>Localdoc is the alternative.</strong> A CLI you own.
-                    Docs on a platform that you, the people, help control.
+                    Docs you control. No middleman.
                 </p>
                 <p>
                     Save yourself another documentation-related "meditation
-                    walk". You'll thank us.
+                    walk."
                 </p>
             </div>
         </div>
@@ -98,32 +98,24 @@
                         <li>Priority support</li>
                     </ul>
                     <p class="text-cyan-400">
-                        AI saves you hours of time writing documentation for
-                        large projects.<br />
-                        Link repo → Get docpack.
+                        5-10 hours saved per project.<br />
+                        Link repo → Get docpack → Done.
                     </p>
                 </div>
             </div>
             <p class="model-philosophy">
                 <strong>You're not paying for hosting.</strong><br />
-                You're paying for
-                <b
-                    >an AI agent that reads your codebase and generates
-                    production-ready documentation automatically</b
-                >. No more manual doc writing. No more copy-pasting between
-                formats. <br /> Link your repo, allocate tokens, publish in
-                minutes. <br />
-                <br />
-            </p>
-
-            <p class="text-blue-800 mb-4">
-                Instant global availability is just a bonus.
+                You're paying for an AI agent that reads your codebase and generates
+                production-ready documentation automatically. No more manual doc
+                writing. No more copy-pasting between formats. Link your repo, allocate
+                tokens, publish in minutes.
             </p>
 
             <p class="model-philosophy">
                 <strong>Like npm. For docs.</strong><br />
                 Anyone can install for free. Only creators pay—and they get automation
-                that makes it worth every cent.
+                that makes it worth every cent. Your docs become instantly installable
+                by thousands of devs worldwide. That's just the bonus.
             </p>
         </div>
     </section>
@@ -131,11 +123,13 @@
     <!-- Call to Action -->
     <section class="cta">
         <div class="container">
-            <h2>Join the revolution.</h2>
+            <h2>Stop the bleeding.</h2>
             <div class="terminal">
                 <div class="terminal-line">$ cargo install localdoc</div>
             </div>
-            <p class="cta-note">Documentation for people who build.</p>
+            <p class="cta-note">
+                Documentation for people who actually build things.
+            </p>
         </div>
     </section>
 
