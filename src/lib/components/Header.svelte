@@ -36,12 +36,22 @@
         class="max-w-[1200px] mx-auto px-5 md:px-8 h-16 flex items-center justify-between"
     >
         <!-- Logo / Brand -->
-        <a
-            href="/"
-            class="text-lg font-normal text-white hover:text-neutral-300 transition-colors no-underline"
-        >
-            doctown
-        </a>
+        <div class="flex items-center gap-8">
+            <a
+                href="/"
+                class="text-lg font-normal text-white hover:text-neutral-300 transition-colors no-underline"
+            >
+                doctown
+            </a>
+
+            <!-- Commons Link -->
+            <a
+                href="/commons"
+                class="text-sm font-normal text-neutral-300 hover:text-white transition-colors no-underline"
+            >
+                Commons
+            </a>
+        </div>
 
         <!-- Right Side: Auth Section -->
         <div class="flex items-center gap-4">
