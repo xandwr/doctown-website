@@ -29,6 +29,8 @@ export async function validateSession(
       github_id: userData.github_id,
       username: userData.username,
       avatar_url: userData.avatar_url,
+      email_notifications: userData.email_notifications ?? false,
+      onboarding_completed: userData.onboarding_completed ?? false,
     };
   } catch (error) {
     console.error("Session validation error:", error);

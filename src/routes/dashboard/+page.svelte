@@ -1,12 +1,89 @@
 <script lang="ts">
     import type { SessionUser } from "$lib/types";
+    import OnboardingModal from "$lib/components/OnboardingModal.svelte";
+    import { invalidateAll } from "$app/navigation";
+    import { PUBLIC_BACKEND_URL } from "$env/static/public";
 
     interface PageData {
         user?: SessionUser | null;
     }
 
     let { data }: { data: PageData } = $props();
+
+    let showOnboarding = $state(false);
+
+    $effect(() => {
+        // Show modal on every login unless dismissed in this session
+        console.log("Dashboard effect running, user:", data.user);
+        if (data.user) {
+            const dismissed = sessionStorage.getItem("onboarding_dismissed");
+            console.log("Session dismissed flag:", dismissed);
+            console.log("User data:", data.user);
+            if (!dismissed) {
+                console.log("Setting showOnboarding to true");
+                showOnboarding = true;
+            }
+        }
+    });
+
+    async function handleSavePreferences(emailNotifications: boolean) {
+        try {
+            const sessionToken = document.cookie
+                .split("; ")
+                .find((row) => row.startsWith("session_token="))
+                ?.split("=")[1];
+
+            if (!sessionToken) {
+                console.error("No session token found");
+                return;
+            }
+
+            const response = await fetch(
+                `${PUBLIC_BACKEND_URL}/api/v1/users/preferences`,
+                {
+                    method: "PATCH",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${sessionToken}`,
+                    },
+                    credentials: "include",
+                    body: JSON.stringify({
+                        email_notifications: emailNotifications,
+                        onboarding_completed: true,
+                    }),
+                },
+            );
+
+            if (!response.ok) {
+                throw new Error("Failed to save preferences");
+            }
+
+            // Refresh user data
+            await invalidateAll();
+
+            // Mark as dismissed for this session
+            sessionStorage.setItem("onboarding_dismissed", "true");
+            showOnboarding = false;
+        } catch (error) {
+            console.error("Error saving preferences:", error);
+        }
+    }
+
+    function handleCloseModal() {
+        // Mark as dismissed for this session
+        sessionStorage.setItem("onboarding_dismissed", "true");
+        showOnboarding = false;
+    }
 </script>
+
+{#if showOnboarding && data.user}
+    <OnboardingModal
+        username={data.user.username}
+        initialEmailNotifications={data.user.email_notifications}
+        onClose={handleCloseModal}
+        onSavePreferences={handleSavePreferences}
+    />
+{/if}
 
 <main class="min-h-screen bg-black">
     <div class="max-w-[1200px] mx-auto px-5 md:px-8 py-16">

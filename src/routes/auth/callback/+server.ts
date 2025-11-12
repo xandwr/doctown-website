@@ -108,8 +108,8 @@ export const GET: RequestHandler = async ({ url, cookies, fetch }) => {
       maxAge: 60 * 60 * 24 * 30, // 30 days
     });
 
-    // Redirect to homepage
-    throw redirect(302, "/");
+    // Redirect to dashboard to trigger onboarding popup
+    throw redirect(302, "/dashboard");
   } catch (err) {
     // Don't catch redirect exceptions - SvelteKit redirects are special objects
     if (
