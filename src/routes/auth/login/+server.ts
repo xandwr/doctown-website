@@ -23,7 +23,7 @@ export const GET: RequestHandler = async ({ cookies }) => {
     path: "/",
     httpOnly: true,
     sameSite: "lax",
-    secure: false, // Set to true in production with HTTPS
+    secure: process.env.NODE_ENV === "production",
     maxAge: 600, // 10 minutes
   });
 
