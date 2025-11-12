@@ -102,6 +102,12 @@
                             >
                                 My Docpacks
                             </a>
+                            <a
+                                href="/settings"
+                                class="block px-4 py-2 text-sm text-neutral-300 hover:bg-neutral-800 transition-colors no-underline"
+                            >
+                                Account Settings
+                            </a>
                             <hr class="my-2 border-neutral-800" />
                             <a
                                 href="/auth/logout"

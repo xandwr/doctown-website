@@ -143,7 +143,13 @@
         </button>
 
         <p class="text-xs text-neutral-600 text-center mt-4">
-            You can change this preference anytime in your account settings.
+            You can change this preference anytime in your{" "}
+            <a
+                href="/settings"
+                class="text-neutral-500 hover:text-neutral-400 underline"
+            >
+                account settings
+            </a>.
         </p>
     </div>
 </div>
