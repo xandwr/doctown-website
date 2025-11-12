@@ -36,32 +36,14 @@
         }
     });
 
-    function getSessionToken(): string | null {
-        return (
-            document.cookie
-                .split("; ")
-                .find((row) => row.startsWith("session_token="))
-                ?.split("=")[1] || null
-        );
-    }
-
     async function loadDocpacks() {
-        const sessionToken = getSessionToken();
-        if (!sessionToken) return;
-
         loadingDocpacks = true;
         error = null;
 
         try {
-            const response = await fetch(
-                `${PUBLIC_BACKEND_URL}/api/v1/docpacks/me`,
-                {
-                    headers: {
-                        Authorization: `Bearer ${sessionToken}`,
-                    },
-                    credentials: "include",
-                },
-            );
+            const response = await fetch("/api/docpacks", {
+                credentials: "include",
+            });
 
             if (!response.ok) {
                 throw new Error("Failed to load docpacks");
@@ -77,22 +59,13 @@
     }
 
     async function loadRepositories() {
-        const sessionToken = getSessionToken();
-        if (!sessionToken) return;
-
         loadingRepos = true;
         error = null;
 
         try {
-            const response = await fetch(
-                `${PUBLIC_BACKEND_URL}/api/v1/repositories`,
-                {
-                    headers: {
-                        Authorization: `Bearer ${sessionToken}`,
-                    },
-                    credentials: "include",
-                },
-            );
+            const response = await fetch("/api/repositories", {
+                credentials: "include",
+            });
 
             if (!response.ok) {
                 throw new Error("Failed to load repositories");
@@ -109,31 +82,24 @@
     }
 
     async function handleRepositorySelect(repo: Repository) {
-        const sessionToken = getSessionToken();
-        if (!sessionToken) return;
-
         creatingDocpack = true;
         error = null;
 
         try {
-            const response = await fetch(
-                `${PUBLIC_BACKEND_URL}/api/v1/docpacks`,
-                {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${sessionToken}`,
-                    },
-                    credentials: "include",
-                    body: JSON.stringify({
-                        name: repo.name,
-                        github_repo_id: repo.id,
-                        github_repo_full_name: repo.full_name,
-                        github_repo_url: repo.html_url,
-                        default_branch: repo.default_branch,
-                    }),
+            const response = await fetch("/api/docpacks", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
                 },
-            );
+                credentials: "include",
+                body: JSON.stringify({
+                    name: repo.name,
+                    github_repo_id: repo.id,
+                    github_repo_full_name: repo.full_name,
+                    github_repo_url: repo.html_url,
+                    default_branch: repo.default_branch,
+                }),
+            });
 
             if (!response.ok) {
                 if (response.status === 409) {
@@ -162,31 +128,17 @@
 
     async function handleSavePreferences(emailNotifications: boolean) {
         try {
-            const sessionToken = document.cookie
-                .split("; ")
-                .find((row) => row.startsWith("session_token="))
-                ?.split("=")[1];
-
-            if (!sessionToken) {
-                console.error("No session token found");
-                return;
-            }
-
-            const response = await fetch(
-                `${PUBLIC_BACKEND_URL}/api/v1/users/preferences`,
-                {
-                    method: "PATCH",
-                    headers: {
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${sessionToken}`,
-                    },
-                    credentials: "include",
-                    body: JSON.stringify({
-                        email_notifications: emailNotifications,
-                        onboarding_completed: true,
-                    }),
+            const response = await fetch("/api/users/preferences", {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
                 },
-            );
+                credentials: "include",
+                body: JSON.stringify({
+                    email_notifications: emailNotifications,
+                    onboarding_completed: true,
+                }),
+            });
 
             if (!response.ok) {
                 throw new Error("Failed to save preferences");
@@ -293,19 +245,17 @@
             {:else}
                 <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                     {#each docpacks as docpack (docpack.id)}
-                        <div
-                            class="border border-neutral-800 rounded-lg p-6 hover:border-neutral-700 transition-colors"
+                        <a
+                            href="/docpacks/{docpack.id}"
+                            class="block border border-neutral-800 rounded-lg p-6 hover:border-neutral-700 transition-colors cursor-pointer no-underline"
                         >
                             <div class="mb-4">
                                 <h3 class="text-xl font-medium text-white mb-2">
                                     {docpack.name}
                                 </h3>
                                 {#if docpack.github_repo_full_name}
-                                    <a
-                                        href={docpack.github_repo_url}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        class="text-sm text-neutral-400 hover:text-neutral-300 flex items-center gap-1"
+                                    <span
+                                        class="text-sm text-neutral-400 flex items-center gap-1"
                                     >
                                         <svg
                                             class="w-4 h-4"
@@ -319,7 +269,7 @@
                                             />
                                         </svg>
                                         {docpack.github_repo_full_name}
-                                    </a>
+                                    </span>
                                 {/if}
                             </div>
                             {#if docpack.summary}
@@ -348,7 +298,7 @@
                                     </span>
                                 {/if}
                             </div>
-                        </div>
+                        </a>
                     {/each}
                 </div>
             {/if}
