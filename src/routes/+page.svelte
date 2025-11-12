@@ -5,113 +5,8 @@
     <!-- Hero: Immediate Hook -->
     <section class="hero">
         <div class="container">
-            <h1>Documentation without dependency.</h1>
-            <p class="subhero">
-                All documentation. One CLI. No corporate bullshit.
-            </p>
-        </div>
-    </section>
-
-    <!-- Quick Start: Get Devs Moving in 10 Seconds -->
-    <section class="quickstart">
-        <div class="container">
-            <h2>Get going. Fast.</h2>
-            <div class="terminal">
-                <div class="terminal-line">$ cargo install localdoc</div>
-                <div class="terminal-line output">
-                    ✓ installed localdoc v0.1.0
-                </div>
-                <div class="terminal-line">&nbsp;</div>
-                <div class="terminal-line">$ localdoc install rust</div>
-                <div class="terminal-line output">
-                    ✓ rust@1.70.0 (15,234 entries)
-                </div>
-                <div class="terminal-line">&nbsp;</div>
-                <div class="terminal-line">
-                    $ localdoc query "iterate vector"
-                </div>
-                <div class="terminal-line output">std::vec::Vec::iter()</div>
-                <div class="terminal-line output">
-                    std::vec::Vec::iter_mut()
-                </div>
-                <div class="terminal-line output">for x in &vec</div>
-            </div>
-            <p class="quickstart-note">
-                That's it. Docs in your terminal. Offline. Forever.
-            </p>
-        </div>
-    </section>
-
-    <!-- Hall of Shame: Calling Shots -->
-    <section class="shame">
-        <div class="container">
-            <h2>If you've felt this, you already know.</h2>
-            <div class="shame-list">
-                <div class="shame-item">
-                    <p class="shame-target">ReadMe.io</p>
-                    <p class="shame-crime">
-                        $99/mo to host markdown. A glorified CMS that makes you
-                        refresh the page to see search results. Your docs
-                        deserve better than a SaaS jailcell.
-                    </p>
-                </div>
-                <div class="shame-item">
-                    <p class="shame-target">Stripe Docs</p>
-                    <p class="shame-crime">
-                        Beautiful design. Useless search. Try finding which
-                        webhook event actually fires first. Go ahead. We'll
-                        wait.
-                    </p>
-                </div>
-                <div class="shame-item">
-                    <p class="shame-target">Square API Sandbox</p>
-                    <p class="shame-crime">
-                        Built a payments empire. Can't make a testing
-                        environment that loads in under 10 seconds. Spinners
-                        don't pay rent.
-                    </p>
-                </div>
-                <div class="shame-item">
-                    <p class="shame-target">AWS Docs</p>
-                    <p class="shame-crime">
-                        17 tabs open. Still don't know if you need IAM:PassRole.
-                        The search gives you 900 results. None of them answer
-                        your question.
-                    </p>
-                </div>
-                <div class="shame-item">
-                    <p class="shame-target">Stack Overflow</p>
-                    <p class="shame-crime">
-                        "Marked as duplicate." The linked answer is from 2011
-                        and doesn't work. Mods won't let you ask again. Ship
-                        your rage into a CLI instead.
-                    </p>
-                </div>
-            </div>
-            <p class="shame-manifesto">
-                You're not the problem. The docs are.<br />
-                <strong>We're fixing it.</strong>
-            </p>
-        </div>
-    </section>
-
-    <!-- The Pitch: What This Is -->
-    <section class="pitch">
-        <div class="container">
-            <div class="pitch-grid">
-                <div class="pitch-item">
-                    <h3>100% offline</h3>
-                    <p>No network. No latency. No tracking.</p>
-                </div>
-                <div class="pitch-item">
-                    <h3>&lt;50ms queries</h3>
-                    <p>Faster than grep. Smarter than find.</p>
-                </div>
-                <div class="pitch-item">
-                    <h3>Zero config</h3>
-                    <p>One binary. One command. Done.</p>
-                </div>
-            </div>
+            <h1>Documentation is a dependency.</h1>
+            <p class="subhero">Let's treat it like one.</p>
         </div>
     </section>
 
@@ -131,28 +26,40 @@
                     find out how <code>async/await</code> works.
                 </p>
                 <p>
-                    You don't need GitBook upselling you on "team seats." You
-                    don't need ReadMe charging $99/mo to render markdown. You
-                    don't need Confluence making you click through three
-                    dropdowns to copy a code snippet.
+                    You don't need <a
+                        href="https://www.gitbook.com/pricing"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="text-neutral-600">GitBook</a
+                    >
+                    upselling you on "team seats." You don't need
+                    <a
+                        href="https://www.mintlify.com/pricing"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="text-green-200">Mintlify</a
+                    >
+                    charging you $250/month to host your docs. You don't need
+                    <a
+                        href="https://www.atlassian.com/software/confluence"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="text-blue-500">Confluence</a
+                    >
+                    making you click through three dropdowns to copy a code snippet.
                 </p>
                 <p>
                     Docs should be <strong>local</strong>,
                     <strong>fast</strong>, and <strong>offline</strong>. They
-                    should live in your terminal—not behind a paywall, not in a
-                    Notion workspace with broken search, not in some VC-funded
-                    "knowledge graph" that'll pivot to AI in six months and rug
-                    you by Q3.
+                    should live in your terminal, not on a dashboard.
                 </p>
                 <p>
                     <strong>Localdoc is the alternative.</strong> A CLI you own.
-                    Docs you control. No middleman. No metrics. No investors demanding
-                    10x growth on your search queries.
+                    Docs on a platform that you, the people, help control.
                 </p>
                 <p>
-                    If you've ever rage-closed a docs site because it <em
-                        >just wouldn't fucking load</em
-                    >—this is for you.
+                    Save yourself another documentation-related "meditation
+                    walk". You'll thank us.
                 </p>
             </div>
         </div>
@@ -162,32 +69,61 @@
     <section class="model">
         <div class="container">
             <h2>The model.</h2>
+            <p class="model-principle">
+                <strong>Consumption is free. Creation is paid.</strong>
+            </p>
             <div class="model-grid">
                 <div class="model-column free">
                     <h3>Free. Forever.</h3>
                     <ul>
+                        <li>Install unlimited docpacks</li>
                         <li>CLI tool (open source)</li>
                         <li>Offline doc queries</li>
-                        <li>Core docpacks (Rust, Python, etc.)</li>
                         <li>Local-first. No tracking.</li>
+                        <li>Search and discover all public docpacks</li>
                     </ul>
                     <p class="model-note">Everything you need to build.</p>
+                    <p class="model-limit opacity-60">
+                        Cannot publish docpacks.
+                    </p>
                 </div>
                 <div class="model-column premium">
-                    <h3>Premium. For velocity.</h3>
+                    <h3>Creator Tier. $12/mo.</h3>
                     <ul>
-                        <li>AI semantic search (token-optimized)</li>
-                        <li>Cloud sync & auto-updates</li>
-                        <li>Private docpack registry</li>
+                        <li>Publish unlimited docpacks</li>
+                        <li>AI auto-generates docpacks from GitHub repos</li>
+                        <li>Monthly compute tokens</li>
+                        <li>Creator dashboard with analytics</li>
+                        <li>Verified badge (GitHub-linked)</li>
                         <li>Priority support</li>
                     </ul>
-                    <p class="model-note">Buy hours. Not features.</p>
+                    <p class="text-cyan-400">
+                        AI saves you hours of time writing documentation for
+                        large projects.<br />
+                        Link repo → Get docpack.
+                    </p>
                 </div>
             </div>
             <p class="model-philosophy">
-                <strong>OSS at the edges. Product at the core.</strong><br />
-                The free layer proves it works. The premium layer keeps the lights
-                on.
+                <strong>You're not paying for hosting.</strong><br />
+                You're paying for
+                <b
+                    >an AI agent that reads your codebase and generates
+                    production-ready documentation automatically</b
+                >. No more manual doc writing. No more copy-pasting between
+                formats. <br /> Link your repo, allocate tokens, publish in
+                minutes. <br />
+                <br />
+            </p>
+
+            <p class="text-blue-800 mb-4">
+                Instant global availability is just a bonus.
+            </p>
+
+            <p class="model-philosophy">
+                <strong>Like npm. For docs.</strong><br />
+                Anyone can install for free. Only creators pay—and they get automation
+                that makes it worth every cent.
             </p>
         </div>
     </section>
@@ -199,10 +135,7 @@
             <div class="terminal">
                 <div class="terminal-line">$ cargo install localdoc</div>
             </div>
-            <p class="cta-note">
-                Documentation for people who build.<br />
-                Not corporations who extract.
-            </p>
+            <p class="cta-note">Documentation for people who build.</p>
         </div>
     </section>
 
@@ -210,8 +143,12 @@
     <section class="footer">
         <div class="container">
             <p>
-                Built by someone who has lost their mind, for people who are on
-                the verge themselves.
+                Built by crazy (<a
+                    href="https://github.com/xandwr"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="text-blue-200">xandwr</a
+                >) to keep others sane.
             </p>
             <p class="footer-links">
                 <a
@@ -219,8 +156,6 @@
                     target="_blank"
                     rel="noopener">GitHub</a
                 >
-                <span>•</span>
-                <span class="coming-soon">Docs (soon)</span>
                 <span>•</span>
                 <a
                     href="https://discord.gg/r8rbntTaKQ"
@@ -237,8 +172,8 @@
         margin: 0;
         background: #000;
         color: #fff;
-        font-family: "IBM Plex Mono", "SF Mono", "Monaco", "Cascadia Code",
-            monospace;
+        font-family:
+            "IBM Plex Mono", "SF Mono", "Monaco", "Cascadia Code", monospace;
         overflow-x: hidden;
         -webkit-font-smoothing: antialiased;
     }
@@ -295,11 +230,6 @@
         line-height: 1.5;
     }
 
-    /* Quick Start */
-    .quickstart h2 {
-        margin-bottom: 32px;
-    }
-
     .terminal {
         background: #000;
         border: 1px solid #333;
@@ -313,90 +243,6 @@
     .terminal-line {
         color: #fff;
         white-space: nowrap;
-    }
-
-    .terminal-line.output {
-        color: #666;
-        padding-left: 16px;
-    }
-
-    .quickstart-note {
-        font-size: 16px;
-        color: #999;
-        margin: 0;
-        line-height: 1.6;
-    }
-
-    /* Hall of Shame */
-    .shame {
-        background: #0a0a0a;
-        padding: 100px 0;
-    }
-
-    .shame h2 {
-        margin-bottom: 60px;
-    }
-
-    .shame-list {
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 40px;
-        margin-bottom: 60px;
-    }
-
-    .shame-item {
-        border-left: 2px solid #f00;
-        padding-left: 20px;
-    }
-
-    .shame-target {
-        font-size: 20px;
-        color: #f00;
-        font-weight: 400;
-        margin: 0 0 12px 0;
-        letter-spacing: -0.01em;
-    }
-
-    .shame-crime {
-        font-size: 16px;
-        color: #999;
-        line-height: 1.7;
-        margin: 0;
-    }
-
-    .shame-manifesto {
-        font-size: 20px;
-        color: #ccc;
-        line-height: 1.6;
-        margin: 0;
-        padding-top: 40px;
-        border-top: 1px solid #222;
-        text-align: center;
-    }
-
-    .shame-manifesto strong {
-        color: #fff;
-    }
-
-    /* Pitch */
-    .pitch-grid {
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 48px;
-    }
-
-    .pitch-item h3 {
-        font-size: 24px;
-        font-weight: 400;
-        margin: 0 0 12px 0;
-        color: #fff;
-    }
-
-    .pitch-item p {
-        font-size: 16px;
-        color: #666;
-        margin: 0;
-        line-height: 1.6;
     }
 
     /* Manifesto */
@@ -432,14 +278,22 @@
         font-size: 0.95em;
     }
 
-    .manifesto-content em {
-        color: #fff;
-        font-style: italic;
-    }
-
     /* Model */
     .model {
         padding: 100px 0;
+    }
+
+    .model-principle {
+        font-size: 20px;
+        color: #ccc;
+        text-align: center;
+        margin: 0 0 60px 0;
+        line-height: 1.5;
+    }
+
+    .model-principle strong {
+        color: #fff;
+        font-weight: 400;
     }
 
     .model-grid {
@@ -486,15 +340,27 @@
         color: #666;
         margin: 0;
         font-style: italic;
+        line-height: 1.5;
+    }
+
+    .model-limit {
+        font-size: 14px;
+        color: #f00;
+        margin: 12px 0 0 0;
+        font-style: italic;
     }
 
     .model-philosophy {
         font-size: 18px;
         color: #999;
         line-height: 1.7;
-        margin: 0;
+        margin: 0 0 24px 0;
         padding-top: 32px;
         border-top: 1px solid #222;
+    }
+
+    .model-philosophy:last-child {
+        margin-bottom: 0;
     }
 
     .model-philosophy strong {
@@ -558,11 +424,6 @@
         color: #333;
     }
 
-    .footer-links .coming-soon {
-        color: #555;
-        font-style: italic;
-    }
-
     /* Desktop Breakpoint */
     @media (min-width: 768px) {
         .container {
@@ -596,11 +457,6 @@
             font-size: 16px;
         }
 
-        .pitch-grid {
-            grid-template-columns: repeat(3, 1fr);
-            gap: 60px;
-        }
-
         .model-grid {
             grid-template-columns: repeat(2, 1fr);
             gap: 60px;
@@ -612,28 +468,6 @@
 
         .model-philosophy {
             font-size: 20px;
-        }
-
-        .shame h2 {
-            margin-bottom: 80px;
-        }
-
-        .shame-list {
-            grid-template-columns: repeat(2, 1fr);
-            gap: 60px;
-            margin-bottom: 80px;
-        }
-
-        .shame-target {
-            font-size: 24px;
-        }
-
-        .shame-crime {
-            font-size: 18px;
-        }
-
-        .shame-manifesto {
-            font-size: 24px;
         }
     }
 
