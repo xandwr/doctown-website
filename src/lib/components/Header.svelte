@@ -36,13 +36,16 @@
         class="max-w-[1200px] mx-auto px-5 md:px-8 h-16 flex items-center justify-between"
     >
         <!-- Logo / Brand -->
-        <div class="flex items-center gap-8">
+        <div class="flex items-center gap-3 md:gap-8">
             <a
                 href="/"
                 class="text-lg font-normal text-white hover:text-neutral-300 transition-colors no-underline"
             >
                 doctown
             </a>
+
+            <!-- Vertical Separator -->
+            <div class="h-6 w-px bg-neutral-700"></div>
 
             <!-- Commons Link -->
             <a

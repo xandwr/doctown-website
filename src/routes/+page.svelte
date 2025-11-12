@@ -20,6 +20,20 @@
         </div>
     </section>
 
+    <!-- Quick Start: For Speedy Devs -->
+    <section class="py-8 md:py-12 border-t border-neutral-900/50">
+        <div class="max-w-[700px] mx-auto px-6 md:px-16 text-center">
+            <p class="text-sm text-neutral-600 mb-3">Quick start</p>
+            <div
+                class="bg-black border border-neutral-800 px-4 py-3 md:px-6 md:py-4 text-sm md:text-base leading-relaxed overflow-x-auto text-left inline-block"
+            >
+                <code class="text-neutral-300 whitespace-nowrap">
+                    $ cargo install localdoc
+                </code>
+            </div>
+        </div>
+    </section>
+
     <!-- The Manifesto: Why This Exists -->
     <section class="py-20 md:py-32 border-t border-neutral-900">
         <div class="max-w-[900px] mx-auto px-6 md:px-16">
@@ -231,13 +245,13 @@
     <section class="py-16 md:py-20 text-center border-t border-neutral-800">
         <div class="max-w-[900px] mx-auto px-6 md:px-16">
             <p class="text-sm text-neutral-600 mb-3">
-                Built by crazy (<a
+                Built by <a
                     href="https://github.com/xandwr"
                     target="_blank"
                     rel="noopener noreferrer"
                     class="text-blue-200 hover:text-blue-100 transition-colors"
-                    >xandwr</a
-                >) to keep others sane.
+                    >crazy</a
+                > to keep others sane.
             </p>
             <p class="flex items-center justify-center gap-3 text-sm">
                 <a
