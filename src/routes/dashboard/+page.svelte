@@ -143,7 +143,9 @@
             if (response.ok) {
                 const job: GenerationJob = await response.json();
                 const previousStatus = jobs.get(docpackId)?.status;
-                jobs.set(docpackId, job);
+
+                // CRITICAL: Force reactivity by creating new Map
+                jobs = new Map(jobs.set(docpackId, job));
 
                 // If job just completed, reload docpacks to get updated status
                 if (
