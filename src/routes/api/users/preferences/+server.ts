@@ -1,6 +1,5 @@
 import { json, error } from "@sveltejs/kit";
 import type { RequestHandler } from "./$types";
-import { PUBLIC_BACKEND_URL } from "$env/static/public";
 
 export const PATCH: RequestHandler = async ({ cookies, request }) => {
   const sessionToken = cookies.get("session_token");
@@ -9,20 +8,22 @@ export const PATCH: RequestHandler = async ({ cookies, request }) => {
     throw error(401, "Not authenticated");
   }
 
+  const backendUrl =
+    process.env.NODE_ENV === "production"
+      ? "https://doctown-backend.fly.dev"
+      : "http://localhost:3000";
+
   try {
     const body = await request.json();
 
-    const response = await fetch(
-      `${PUBLIC_BACKEND_URL}/api/v1/users/preferences`,
-      {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${sessionToken}`,
-        },
-        body: JSON.stringify(body),
+    const response = await fetch(`${backendUrl}/api/v1/users/preferences`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${sessionToken}`,
       },
-    );
+      body: JSON.stringify(body),
+    });
 
     if (!response.ok) {
       throw error(response.status, "Failed to update preferences");

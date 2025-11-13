@@ -1,6 +1,5 @@
 import { error } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
-import { PUBLIC_BACKEND_URL } from "$env/static/public";
 import type { Docpack } from "$lib/types";
 
 export const load: PageServerLoad = async ({ params, cookies }) => {
@@ -10,9 +9,14 @@ export const load: PageServerLoad = async ({ params, cookies }) => {
     throw error(401, "Not authenticated");
   }
 
+  const backendUrl =
+    process.env.NODE_ENV === "production"
+      ? "https://doctown-backend.fly.dev"
+      : "http://localhost:3000";
+
   try {
     const response = await fetch(
-      `${PUBLIC_BACKEND_URL}/api/v1/docpacks/id/${params.id}`,
+      `${backendUrl}/api/v1/docpacks/id/${params.id}`,
       {
         headers: {
           Authorization: `Bearer ${sessionToken}`,

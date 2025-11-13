@@ -1,6 +1,5 @@
 import { json, error } from "@sveltejs/kit";
 import type { RequestHandler } from "./$types";
-import { PUBLIC_BACKEND_URL } from "$env/static/public";
 
 export const GET: RequestHandler = async ({ cookies }) => {
   const sessionToken = cookies.get("session_token");
@@ -9,8 +8,13 @@ export const GET: RequestHandler = async ({ cookies }) => {
     throw error(401, "Not authenticated");
   }
 
+  const backendUrl =
+    process.env.NODE_ENV === "production"
+      ? "https://doctown-backend.fly.dev"
+      : "http://localhost:3000";
+
   try {
-    const response = await fetch(`${PUBLIC_BACKEND_URL}/api/v1/docpacks/me`, {
+    const response = await fetch(`${backendUrl}/api/v1/docpacks/me`, {
       headers: {
         Authorization: `Bearer ${sessionToken}`,
       },
@@ -35,10 +39,15 @@ export const POST: RequestHandler = async ({ cookies, request }) => {
     throw error(401, "Not authenticated");
   }
 
+  const backendUrl =
+    process.env.NODE_ENV === "production"
+      ? "https://doctown-backend.fly.dev"
+      : "http://localhost:3000";
+
   try {
     const body = await request.json();
 
-    const response = await fetch(`${PUBLIC_BACKEND_URL}/api/v1/docpacks`, {
+    const response = await fetch(`${backendUrl}/api/v1/docpacks`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
