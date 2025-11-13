@@ -1,5 +1,6 @@
 <script lang="ts">
     import type { GenerationJob } from "$lib/types";
+    import { onMount } from "svelte";
 
     interface Props {
         job: GenerationJob;
@@ -7,6 +8,8 @@
     }
 
     let { job, onClose }: Props = $props();
+    let logsContainer: HTMLDivElement | null = null;
+    let previousLogCount = 0;
 
     function getStageLabel(stage: string | null): string {
         if (!stage) return "Initializing";
@@ -35,13 +38,30 @@
         const date = new Date(timestamp);
         return date.toLocaleTimeString();
     }
+
+    // Auto-scroll logs when new messages arrive
+    $effect(() => {
+        if (job.log_messages && job.log_messages.length > previousLogCount) {
+            previousLogCount = job.log_messages.length;
+            if (
+                logsContainer &&
+                (job.status === "running" || job.status === "pending")
+            ) {
+                // Small delay to ensure DOM is updated
+                setTimeout(() => {
+                    logsContainer?.scrollTo({
+                        top: logsContainer.scrollHeight,
+                        behavior: "smooth",
+                    });
+                }, 100);
+            }
+        }
+    });
 </script>
 
 <div class="border border-neutral-800 rounded-lg p-6 bg-neutral-900">
     <div class="flex items-center justify-between mb-4">
-        <h3 class="text-lg font-medium text-white">
-            Documentation Generation
-        </h3>
+        <h3 class="text-lg font-medium text-white">Documentation Generation</h3>
         {#if onClose}
             <button
                 onclick={onClose}
@@ -80,25 +100,25 @@
         </span>
     </div>
 
-    <!-- Progress Bar -->
+    <!-- Stage Indicator -->
     {#if job.status === "running" || job.status === "pending"}
         <div class="mb-4">
-            <div class="flex justify-between text-sm mb-2">
-                <span class="text-neutral-400">{getStageLabel(job.stage)}</span>
-                <span class="text-white">{job.progress_pct}%</span>
-            </div>
-            <div class="w-full bg-neutral-800 rounded-full h-2">
+            <div class="flex items-center gap-2 text-sm">
                 <div
-                    class="bg-blue-500 h-2 rounded-full transition-all duration-300"
-                    style="width: {job.progress_pct}%"
+                    class="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-500"
                 ></div>
+                <span class="text-blue-400 font-medium"
+                    >{getStageLabel(job.stage)}</span
+                >
             </div>
         </div>
     {/if}
 
     <!-- Error Message -->
     {#if job.status === "failed" && job.error_message}
-        <div class="mb-4 p-3 bg-red-900 bg-opacity-20 border border-red-700 rounded">
+        <div
+            class="mb-4 p-3 bg-red-900 bg-opacity-20 border border-red-700 rounded"
+        >
             <p class="text-sm text-red-300">{job.error_message}</p>
         </div>
     {/if}
@@ -114,26 +134,24 @@
         </div>
     {/if}
 
-    <!-- Logs -->
+    <!-- Logs (always visible during generation) -->
     {#if job.log_messages && job.log_messages.length > 0}
         <div class="mt-4">
-            <button
-                onclick={() => {
-                    const logsEl = document.getElementById("logs-" + job.id);
-                    if (logsEl) {
-                        logsEl.classList.toggle("hidden");
-                    }
-                }}
-                class="text-sm text-neutral-400 hover:text-white transition-colors mb-2"
-            >
-                Toggle Logs ({job.log_messages.length})
-            </button>
+            <div class="flex items-center justify-between mb-2">
+                <h4 class="text-sm font-medium text-neutral-400">
+                    Process Log ({job.log_messages.length} messages)
+                </h4>
+                {#if job.status === "running" || job.status === "pending"}
+                    <span class="text-xs text-neutral-500">Live updates</span>
+                {/if}
+            </div>
             <div
+                bind:this={logsContainer}
                 id="logs-{job.id}"
-                class="hidden max-h-60 overflow-y-auto bg-black border border-neutral-800 rounded p-3 font-mono text-xs"
+                class="max-h-80 overflow-y-auto bg-black border border-neutral-800 rounded p-3 font-mono text-xs scroll-smooth"
             >
-                {#each job.log_messages.slice(-20) as log}
-                    <div class="mb-1">
+                {#each job.log_messages as log}
+                    <div class="mb-1 leading-relaxed">
                         <span class="text-neutral-600"
                             >[{formatTimestamp(log.timestamp)}]</span
                         >
@@ -142,7 +160,9 @@
                                 ? 'red'
                                 : log.level === 'warning'
                                   ? 'yellow'
-                                  : 'neutral'}-400"
+                                  : log.level === 'debug'
+                                    ? 'neutral-600'
+                                    : 'neutral'}-400"
                         >
                             [{log.level.toUpperCase()}]
                         </span>
@@ -158,11 +178,14 @@
         <div class="flex gap-4">
             <span>Created: {new Date(job.created_at).toLocaleString()}</span>
             {#if job.started_at}
-                <span>Started: {new Date(job.started_at).toLocaleString()}</span>
+                <span>Started: {new Date(job.started_at).toLocaleString()}</span
+                >
             {/if}
             {#if job.completed_at}
                 <span
-                    >Completed: {new Date(job.completed_at).toLocaleString()}</span
+                    >Completed: {new Date(
+                        job.completed_at,
+                    ).toLocaleString()}</span
                 >
             {/if}
         </div>

@@ -70,7 +70,7 @@
             if (activeDocpacks.length > 0) {
                 activeDocpacks.forEach((docpackId) => pollJobStatus(docpackId));
             }
-        }, 3000); // Poll every 3 seconds
+        }, 1000); // Poll every 1 second for near real-time updates
     }
 
     async function loadDocpacks() {
