@@ -68,14 +68,25 @@
             });
 
             if (!response.ok) {
-                throw new Error("Failed to load repositories");
+                const errorText = await response.text();
+                console.error(
+                    "Repository fetch failed:",
+                    response.status,
+                    errorText,
+                );
+                throw new Error(
+                    `Failed to load repositories: ${response.status} ${errorText}`,
+                );
             }
 
             repositories = await response.json();
             showRepoSelector = true;
         } catch (err) {
             console.error("Error loading repositories:", err);
-            error = "Failed to load your repositories from GitHub";
+            error =
+                err instanceof Error
+                    ? err.message
+                    : "Failed to load your repositories from GitHub";
         } finally {
             loadingRepos = false;
         }
