@@ -86,13 +86,28 @@
                 throw new Error("Failed to load docpacks");
             }
 
-            docpacks = await response.json();
+            const newDocpacks = await response.json();
+            docpacks = newDocpacks;
 
-            // Load job status for each docpack
+            // Load job status for each docpack, but keep existing job data
             for (const docpack of docpacks) {
-                if (!docpack.is_public) {
-                    // Only check for jobs on pending docpacks
+                // Only check for jobs if we don't already have current job data or if docpack is not public yet
+                if (!docpack.is_public && !jobs.has(docpack.id)) {
                     await loadJobStatus(docpack.id);
+                }
+            }
+
+            // Clean up jobs for docpacks that are now public (completed)
+            const docpackIds = new Set(docpacks.map((d) => d.id));
+            for (const [jobDocpackId, job] of jobs.entries()) {
+                // If docpack is now public and job is completed, we can keep the job to show completion message
+                const docpack = docpacks.find((d) => d.id === jobDocpackId);
+                if (docpack?.is_public && job.status === "completed") {
+                    // Keep completed jobs visible for a bit
+                    setTimeout(() => {
+                        jobs.delete(jobDocpackId);
+                        jobs = jobs; // trigger reactivity
+                    }, 5000);
                 }
             }
         } catch (err) {
@@ -127,10 +142,14 @@
 
             if (response.ok) {
                 const job: GenerationJob = await response.json();
+                const previousStatus = jobs.get(docpackId)?.status;
                 jobs.set(docpackId, job);
 
-                // If job completed, reload docpacks to get updated status
-                if (job.status === "completed" || job.status === "failed") {
+                // If job just completed, reload docpacks to get updated status
+                if (
+                    (job.status === "completed" || job.status === "failed") &&
+                    previousStatus !== job.status
+                ) {
                     await loadDocpacks();
                 }
             }
