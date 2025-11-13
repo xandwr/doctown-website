@@ -53,3 +53,22 @@ export interface Docpack {
   created_at: string;
   updated_at: string;
 }
+
+export interface GenerationJob {
+  id: number;
+  docpack_id: number;
+  status: "pending" | "running" | "completed" | "failed" | "cancelled";
+  stage: string | null;
+  progress_pct: number;
+  log_messages: LogMessage[];
+  error_message: string | null;
+  created_at: string;
+  started_at: string | null;
+  completed_at: string | null;
+}
+
+export interface LogMessage {
+  timestamp: string;
+  level: "debug" | "info" | "warning" | "error";
+  message: string;
+}

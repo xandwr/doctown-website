@@ -1,9 +1,16 @@
 <script lang="ts">
-    import type { SessionUser, Repository, Docpack } from "$lib/types";
+    import type {
+        SessionUser,
+        Repository,
+        Docpack,
+        GenerationJob,
+    } from "$lib/types";
     import OnboardingModal from "$lib/components/OnboardingModal.svelte";
     import RepositorySelector from "$lib/components/RepositorySelector.svelte";
+    import GenerationProgress from "$lib/components/GenerationProgress.svelte";
     import { invalidateAll } from "$app/navigation";
     import { PUBLIC_BACKEND_URL } from "$env/static/public";
+    import { onDestroy } from "svelte";
 
     interface PageData {
         user?: SessionUser | null;
@@ -15,10 +22,13 @@
     let showRepoSelector = $state(false);
     let repositories = $state<Repository[]>([]);
     let docpacks = $state<Docpack[]>([]);
+    let jobs = $state<Map<number, GenerationJob>>(new Map()); // docpack_id -> job
     let loadingRepos = $state(false);
     let loadingDocpacks = $state(false);
     let creatingDocpack = $state(false);
+    let generatingDocs = $state<Set<number>>(new Set());
     let error = $state<string | null>(null);
+    let pollInterval: ReturnType<typeof setInterval> | null = null;
 
     $effect(() => {
         // Show modal on every login unless dismissed in this session
@@ -33,8 +43,35 @@
             }
             // Load user's docpacks
             loadDocpacks();
+
+            // Start polling for active jobs
+            startPolling();
         }
     });
+
+    onDestroy(() => {
+        if (pollInterval) {
+            clearInterval(pollInterval);
+        }
+    });
+
+    function startPolling() {
+        if (pollInterval) return;
+
+        pollInterval = setInterval(() => {
+            // Poll for any active jobs
+            const activeDocpacks = Array.from(jobs.entries())
+                .filter(
+                    ([_, job]) =>
+                        job.status === "pending" || job.status === "running",
+                )
+                .map(([docpackId, _]) => docpackId);
+
+            if (activeDocpacks.length > 0) {
+                activeDocpacks.forEach((docpackId) => pollJobStatus(docpackId));
+            }
+        }, 3000); // Poll every 3 seconds
+    }
 
     async function loadDocpacks() {
         loadingDocpacks = true;
@@ -50,11 +87,91 @@
             }
 
             docpacks = await response.json();
+
+            // Load job status for each docpack
+            for (const docpack of docpacks) {
+                if (!docpack.is_public) {
+                    // Only check for jobs on pending docpacks
+                    await loadJobStatus(docpack.id);
+                }
+            }
         } catch (err) {
             console.error("Error loading docpacks:", err);
             error = "Failed to load your docpacks";
         } finally {
             loadingDocpacks = false;
+        }
+    }
+
+    async function loadJobStatus(docpackId: number) {
+        try {
+            const response = await fetch(`/api/docpacks/${docpackId}/job`, {
+                credentials: "include",
+            });
+
+            if (response.ok) {
+                const job: GenerationJob = await response.json();
+                jobs.set(docpackId, job);
+            }
+        } catch (err) {
+            // No job found, that's okay
+            console.debug(`No job found for docpack ${docpackId}`);
+        }
+    }
+
+    async function pollJobStatus(docpackId: number) {
+        try {
+            const response = await fetch(`/api/docpacks/${docpackId}/job`, {
+                credentials: "include",
+            });
+
+            if (response.ok) {
+                const job: GenerationJob = await response.json();
+                jobs.set(docpackId, job);
+
+                // If job completed, reload docpacks to get updated status
+                if (job.status === "completed" || job.status === "failed") {
+                    await loadDocpacks();
+                }
+            }
+        } catch (err) {
+            console.error(`Error polling job for docpack ${docpackId}:`, err);
+        }
+    }
+
+    async function generateDocumentation(docpackId: number) {
+        generatingDocs.add(docpackId);
+        error = null;
+
+        try {
+            const response = await fetch("/api/jobs", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                credentials: "include",
+                body: JSON.stringify({ docpack_id: docpackId }),
+            });
+
+            if (!response.ok) {
+                if (response.status === 409) {
+                    throw new Error(
+                        "A generation job is already running for this docpack",
+                    );
+                }
+                throw new Error("Failed to start documentation generation");
+            }
+
+            const job: GenerationJob = await response.json();
+            jobs.set(docpackId, job);
+        } catch (err) {
+            console.error("Error starting generation:", err);
+            error =
+                err instanceof Error
+                    ? err.message
+                    : "Failed to start documentation generation";
+        } finally {
+            generatingDocs.delete(docpackId);
         }
     }
 
@@ -254,42 +371,63 @@
                     </p>
                 </div>
             {:else}
-                <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                <div class="grid gap-6 md:grid-cols-1">
                     {#each docpacks as docpack (docpack.id)}
-                        <a
-                            href="/docpacks/{docpack.id}"
-                            class="block border border-neutral-800 rounded-lg p-6 hover:border-neutral-700 transition-colors cursor-pointer no-underline"
-                        >
-                            <div class="mb-4">
-                                <h3 class="text-xl font-medium text-white mb-2">
-                                    {docpack.name}
-                                </h3>
-                                {#if docpack.github_repo_full_name}
-                                    <span
-                                        class="text-sm text-neutral-400 flex items-center gap-1"
+                        <div class="border border-neutral-800 rounded-lg p-6">
+                            <div class="flex items-start justify-between mb-4">
+                                <a
+                                    href="/docpacks/{docpack.id}"
+                                    class="flex-1 no-underline"
+                                >
+                                    <h3
+                                        class="text-xl font-medium text-white mb-2"
                                     >
-                                        <svg
-                                            class="w-4 h-4"
-                                            fill="currentColor"
-                                            viewBox="0 0 24 24"
+                                        {docpack.name}
+                                    </h3>
+                                    {#if docpack.github_repo_full_name}
+                                        <span
+                                            class="text-sm text-neutral-400 flex items-center gap-1"
                                         >
-                                            <path
-                                                fill-rule="evenodd"
-                                                d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"
-                                                clip-rule="evenodd"
-                                            />
-                                        </svg>
-                                        {docpack.github_repo_full_name}
-                                    </span>
+                                            <svg
+                                                class="w-4 h-4"
+                                                fill="currentColor"
+                                                viewBox="0 0 24 24"
+                                            >
+                                                <path
+                                                    fill-rule="evenodd"
+                                                    d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"
+                                                    clip-rule="evenodd"
+                                                />
+                                            </svg>
+                                            {docpack.github_repo_full_name}
+                                        </span>
+                                    {/if}
+                                </a>
+
+                                {#if !docpack.is_public && !jobs.has(docpack.id)}
+                                    <button
+                                        onclick={() =>
+                                            generateDocumentation(docpack.id)}
+                                        disabled={generatingDocs.has(
+                                            docpack.id,
+                                        )}
+                                        class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm font-medium"
+                                    >
+                                        {generatingDocs.has(docpack.id)
+                                            ? "Starting..."
+                                            : "Generate Docs"}
+                                    </button>
                                 {/if}
                             </div>
+
                             {#if docpack.summary}
                                 <p class="text-sm text-neutral-400 mb-4">
                                     {docpack.summary}
                                 </p>
                             {/if}
+
                             <div
-                                class="flex items-center gap-4 text-xs text-neutral-500"
+                                class="flex items-center gap-4 text-xs text-neutral-500 mb-4"
                             >
                                 <span class="px-2 py-1 bg-neutral-800 rounded">
                                     {docpack.ecosystem}
@@ -309,7 +447,14 @@
                                     </span>
                                 {/if}
                             </div>
-                        </a>
+
+                            <!-- Show generation progress if job exists -->
+                            {#if jobs.has(docpack.id)}
+                                <GenerationProgress
+                                    job={jobs.get(docpack.id)!}
+                                />
+                            {/if}
+                        </div>
                     {/each}
                 </div>
             {/if}
