@@ -38,7 +38,7 @@ export interface Repository {
 export interface Docpack {
   id: number;
   name: string;
-  version: string;
+  version: string; // Display version (short commit hash)
   ecosystem: string;
   summary: string | null;
   description: string | null;
@@ -48,6 +48,8 @@ export interface Docpack {
   github_repo_full_name: string | null;
   github_repo_url: string | null;
   default_branch: string | null;
+  commit_hash: string; // Full git commit SHA
+  branch: string | null; // Branch used for generation
   downloads: number;
   is_public: boolean;
   created_at: string;

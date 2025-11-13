@@ -13,7 +13,6 @@
 
     // Editable fields - initialize in $effect
     let editableName = $state(data.docpack.name);
-    let editableVersion = $state(data.docpack.version);
     let editableEcosystem = $state(data.docpack.ecosystem);
     let editableSummary = $state(data.docpack.summary || "");
     let editableDescription = $state(data.docpack.description || "");
@@ -24,7 +23,6 @@
     // Update editable fields when data changes
     $effect(() => {
         editableName = data.docpack.name;
-        editableVersion = data.docpack.version;
         editableEcosystem = data.docpack.ecosystem;
         editableSummary = data.docpack.summary || "";
         editableDescription = data.docpack.description || "";
@@ -47,7 +45,6 @@
                 credentials: "include",
                 body: JSON.stringify({
                     name: editableName,
-                    version: editableVersion,
                     ecosystem: editableEcosystem,
                     summary: editableSummary || null,
                     description: editableDescription || null,
@@ -183,17 +180,24 @@
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label
-                                for="version"
                                 class="block text-sm font-medium text-neutral-300 mb-2"
                             >
-                                Version
+                                Version (Commit Hash)
                             </label>
-                            <input
-                                id="version"
-                                type="text"
-                                bind:value={editableVersion}
-                                class="w-full px-4 py-2 bg-neutral-800 border border-neutral-700 rounded text-white focus:outline-none focus:border-neutral-600"
-                            />
+                            <div
+                                class="w-full px-4 py-2 bg-neutral-900 border border-neutral-700 rounded text-neutral-400 font-mono text-sm"
+                            >
+                                {data.docpack.commit_hash}
+                                {#if data.docpack.branch}
+                                    <span class="text-neutral-500 ml-2"
+                                        >on {data.docpack.branch}</span
+                                    >
+                                {/if}
+                            </div>
+                            <p class="text-xs text-neutral-500 mt-1">
+                                Version is automatically set from the Git commit
+                                hash and cannot be edited manually.
+                            </p>
                         </div>
 
                         <div>
